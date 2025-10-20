@@ -65,7 +65,34 @@ router := gin.Default()
 	s.ListenAndServe()
 ```
 
-#  HTTP 方法
+http.Server 核心字段有：
+
+- Addr string：监听地址与端口，如 ":8080"。
+- Handler Handler：请求处理器。配合 Gin 时设置为 router（*gin.Engine）。
+- TLSConfig *tls.Config：自定义 TLS 行为（协议版本、证书、CipherSuite 等）。
+- ReadTimeout time.Duration：从连接建立开始，读取整个请求（头+体）的最大时长。流式上传可能不适合设置过小。
+- ReadHeaderTimeout time.Duration：仅读取请求头的最大时长，专门防御慢速攻击（slowloris）。
+- WriteTimeout time.Duration：写响应的最大时长。若你的响应是长时间流式发送，慎用或留为零值。
+- IdleTimeout time.Duration：保持连接（keep-alive）空闲的最大时长。
+- MaxHeaderBytes int：请求头最大字节数，默认 1<<20（1MB）。
+- ErrorLog *log.Logger：服务器内部错误日志输出目标。
+- ConnState func(net.Conn, ConnState)：连接状态变化回调（New/Active/Idle/Hijacked/Closed）。
+- BaseContext func(net.Listener) context.Context：为新连接提供基础上下文根，用于统一取消/元数据。
+- ConnContext func(ctx context.Context, c net.Conn) context.Context：为每个连接定制上下文（如打标签）。
+
+常用方法：
+
+- ListenAndServe()：在 Addr 上启动 HTTP 服务（明文）。
+- ListenAndServeTLS(certFile, keyFile string)：启动 HTTPS，证书文件路径由参数提供。 一般的做法是 https 在 nginx 中配置，然后转发到后方服务，gin 只负责处理业务逻辑。
+- Serve(l net.Listener) / ServeTLS(l, certFile, keyFile)：在自定义 net.Listener 上启动服务（可做端口重用、绑定策略等）。
+- Shutdown(ctx context.Context)：优雅关闭，拒绝新连接，等待活动请求完成或直到 ctx 超时。
+- Close()：立即关闭，活动请求会被打断。
+- RegisterOnShutdown(func())：注册关闭时的钩子。
+- SetKeepAlivesEnabled(bool)：启用/关闭 HTTP keep-alive。
+- RegisterOnShutdown(func())：注册关闭时的钩子。
+- SetKeepAlivesEnabled(bool)：启用/关闭 HTTP keep-alive。
+
+ HTTP 方法 有 GET POST PUT PATCH DELETE OPTIONS HEAD 如下：
 
 ```go
 	router.GET("/someGet", getting)
@@ -77,16 +104,16 @@ router := gin.Default()
 	router.OPTIONS("/someOptions", options)
 ```
 
-#  路由 Route 
+##  路由 Route 
 
 路由方法有 **GET, POST, PUT, PATCH, DELETE** 和 **OPTIONS**，还有**Any**，可匹配以上任意类型的请求。
 
-## Get 解析路径参数
+### Get 解析路径参数
 
 动态的路由，如 `/player/:name`，通过调用不同的 url 来传入不同的 name。`/player/:name/*role`，`*` 代表可选。
 
 ```go
-// 匹配 /player/xyecho
+// 匹配 /player/fangkn
 r.GET("/player/:name", func(c *gin.Context) {  
 	name := c.Param("name")  
 	c.String(http.StatusOK, "Hello  %s", name)  
@@ -94,21 +121,21 @@ r.GET("/player/:name", func(c *gin.Context) {
 ```
 
 ```sh 
->curl http://127.0.0.1:8080/player/xyecho
-Hello  xyecho
+>curl http://127.0.0.1:8080/player/fangkn
+Hello  fangkn
 ```
 
-##  获取Query参数
+###  获取Query参数
 
 ```go
 r.GET("/users", func(c *gin.Context) {
 	name := c.Query("name")
-	role := c.DefaultQuery("role", "kakaxi")
+	role := c.DefaultQuery("role", "kn")
 	c.String(200, "%s is a %s", name, role)
 })
 ```
 
-## 获取POST参数
+### 获取POST参数
 
 `PostForm `  从表单中获取参数。
 `DefaultPostForm` 从表单中获取参数,如果没有就给出默认的。
@@ -128,17 +155,16 @@ r.POST("/form", func(c *gin.Context) {
 测试结果：
 
 ```sh 
-> curl http://127.0.0.1:8080/form -X POST -d 'username=kakaxi&password=1234'
-> 	{"password":"1234","username":"kakaxi"}
+> curl http://127.0.0.1:8080/form -X POST -d 'username=kk&password=1234'
+> 	{"password":"1234","username":"kk"}
 ```
 
-## Query和POST混合参数
+### Query和POST混合参数
 
 用 `r.POST` 的方式绑定处理函数。 
 
 `GET` 方式的参数用 `c.Query` 和 `c.DefaultQuery` 解析。 
 `POST` 方式的参数用   `c.PostForm `和  `c.DefaultPostForm` 解析。 
-
 
 ```go
 // GET 和 POST 混合
@@ -162,15 +188,15 @@ r.POST("/posts", func(c *gin.Context) {
 测试结果：
 
 ```sh 
-curl "http://127.0.0.1:8080/posts?id=9876&page=7" -X POST -d 'username=kakaxi&password=1234'
+curl "http://127.0.0.1:8080/posts?id=9876&page=7" -X POST -d 'username=kk&password=1234'
 
-{"id":"9876","page":"7","password":"kakaxi","username":"kakaxi"}
+{"id":"9876","page":"7","password":"1234","username":"kk"}
 ```
 
 
-## Map参数
+### Map参数
 
-这个方式用的比较少。
+这个方式用的比较少。如果不存在会有什么问题？ 
 
 ```go
 // Map参数
@@ -222,7 +248,7 @@ func main() {
 }
 ```
 
-#  重定向(Redirect)
+## 重定向(Redirect)
 
 当我们请求 index1 时，我们可能通过  `Redirect` 重定向到 index2。
 
@@ -272,8 +298,7 @@ r.GET("/test2", func(c *gin.Context) {
 })
 ```
 
-
-#  分组路由(Grouping Routes)
+##  分组路由(Grouping Routes)
 
 路由分组功能可以按业务上需求对接口进行分组。在代码和框架上比较清晰。
 如：按版本分，部门分，权限分/
@@ -314,7 +339,7 @@ v2 := r.Group("/v2")
 {"path":"/v2/bag"}%
 ```
 
-#  中间件
+##  中间件
 
 ```go
 func main() {
@@ -354,11 +379,48 @@ func main() {
 }
 ```
 
-# BasicAuth 中间件
+## BasicAuth 中间件
 
-待补充
+HTTP Basic Authentication 是一种最简单的身份验证方式。客户端在请求时，通过 HTTP 头部发送用户名和密码 如：
 
-# 在中间件中使用 goroutine 
+```sh 
+Authorization: Basic base64(username:password)
+```
+
+```go 
+// 触发 "localhost:8080/admin/secrets
+	authorized.GET("/secrets", func(c *gin.Context) {
+		// 获取用户，它是由 BasicAuth 中间件设置的
+		user := c.MustGet(gin.AuthUserKey).(string)
+		if secret, ok := secrets[user]; ok {
+			c.JSON(http.StatusOK, gin.H{"user": user, "secret": secret})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"user": user, "secret": "NO SECRET :("})
+		}
+	})
+```
+```sh 
+➜  curl -i http://localhost:8080/admin/secrets
+HTTP/1.1 401 Unauthorized
+Www-Authenticate: Basic realm="Authorization Required"
+Date: Mon, 20 Oct 2025 14:25:48 GMT
+Content-Length: 0
+
+➜  curl -sS -u austin:1234 http://localhost:8080/admin/secrets
+{"secret":{"email":"austin@example.com","phone":"666"},"user":"austin"}
+
+➜ curl -i -H 'Authorization: Basic Zm9vOmJhcg==' http://localhost:8080/admin/secrets
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Mon, 20 Oct 2025 14:26:17 GMT
+Content-Length: 64
+
+{"secret":{"email":"foo@bar.com","phone":"123433"},"user":"foo"}%
+
+```
+
+##  在中间件中使用 goroutine 
+
 当在中间件或 handler 中启动新的 Goroutine 时，**不能**使用原始的上下文，必须使用只读副本。
 
 ```go
@@ -367,7 +429,7 @@ func main() {
 
 	r.GET("/long_async", func(c *gin.Context) {
 		// 创建在 goroutine 中使用的副本
-		cCp := c.Copy()
+		cCp := c.Copy()  // <--------- 必须使用只读副本
 		go func() {
 			// 用 time.Sleep() 模拟一个长任务。
 			time.Sleep(5 * time.Second)
