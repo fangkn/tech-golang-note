@@ -388,6 +388,13 @@ Authorization: Basic base64(username:password)
 ```
 
 ```go 
+// 模拟一些私人数据
+var secrets = gin.H{
+	"foo":    gin.H{"email": "foo@bar.com", "phone": "123433"},
+	"austin": gin.H{"email": "austin@example.com", "phone": "666"},
+	"lena":   gin.H{"email": "lena@guapa.com", "phone": "523443"},
+}
+
 // 触发 "localhost:8080/admin/secrets
 	authorized.GET("/secrets", func(c *gin.Context) {
 		// 获取用户，它是由 BasicAuth 中间件设置的
@@ -419,7 +426,10 @@ Content-Length: 64
 
 ```
 
-##  在中间件中使用 goroutine 
+见 [](./gin-basicauth/main.go)
+
+
+## 在中间件中使用 goroutine 
 
 当在中间件或 handler 中启动新的 Goroutine 时，**不能**使用原始的上下文，必须使用只读副本。
 
@@ -451,7 +461,7 @@ func main() {
 	r.Run(":8080")
 }
 ```
-# 上传文件
+## 上传文件
 
 上传文件可以分上传单个文件或上传多个文件。 
 
@@ -481,8 +491,6 @@ r.POST("/batchupload", func(c *gin.Context) {
 
 })
 ```
-
-
 #  JSON
 
 # JSONP
