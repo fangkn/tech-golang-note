@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>文件上传演示</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; margin: 2rem; }
+    h1 { margin-bottom: 0.5rem; }
+    section { border: 1px solid #ddd; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
+    label { display: inline-block; margin-bottom: 0.5rem; }
+    .actions { margin-top: 0.75rem; }
+    button { padding: 0.5rem 1rem; cursor: pointer; }
+    .result { margin-top: 0.75rem; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; white-space: pre-wrap; }
+    .row { display: flex; gap: 1rem; }
+    .row > section { flex: 1; }
+  </style>
+</head>
+<body>
+  <h1>Gin 文件上传演示</h1>
+  <p>接口：<code>/upload</code>（单文件，字段名 <code>file</code>），<code>/batchupload</code>（多文件，字段名 <code>upload[]</code>）。</p>
+
+  <div class="row">
+    <section>
+      <h2>单文件上传（POST /upload）</h2>
+      <form id="single-form" enctype="multipart/form-data">
+        <label for="single-file">选择文件：</label><br />
+        <input type="file" id="single-file" name="file" />
+        <div class="actions">
+          <button type="submit">提交</button>
+        </div>
+      </form>
+      <div id="single-result" class="result"></div>
+    </section>
+
+    <section>
+      <h2>批量上传（POST /batchupload）</h2>
+      <form id="batch-form" enctype="multipart/form-data">
+        <label for="batch-files">选择多个文件：</label><br />
+        <input type="file" id="batch-files" name="upload[]" multiple />
+        <div class="actions">
+          <button type="submit">提交</button>
+        </div>
+      </form>
+      <div id="batch-result" class="result"></div>
+    </section>
+  </div>
+
+  <script>
+    async function postForm(url, formData) {
+      const resp = await fetch(url, { method: 'POST', body: formData });
+      const text = await resp.text();
+      return { ok: resp.ok, status: resp.status, body: text };
+    }
+
+    document.getElementById('single-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.currentTarget;
+      const fileInput = document.getElementById('single-file');
+      const result = document.getElementById('single-result');
+      result.textContent = '上传中...';
+
+      const fd = new FormData();
+      if (fileInput.files.length === 0) {
+        result.textContent = '请先选择一个文件';
+        return;
+      }
+      fd.append('file', fileInput.files[0]);
+
+      try {
+        const r = await postForm('/upload', fd);
+        result.textContent = `HTTP ${r.status}\n\n${r.body}`;
+      } catch (err) {
+        result.textContent = `请求失败: ${err}`;
+      }
+    });
+
+    document.getElementById('batch-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('batch-files');
+      const result = document.getElementById('batch-result');
+      result.textContent = '上传中...';
+
+      const fd = new FormData();
+      if (fileInput.files.length === 0) {
+        result.textContent = '请至少选择一个文件';
+        return;
+      }
+      for (const f of fileInput.files) {
+        fd.append('upload[]', f);
+      }
+
+      try {
+        const r = await postForm('/batchupload', fd);
+        result.textContent = `HTTP ${r.status}\n\n${r.body}`;
+      } catch (err) {
+        result.textContent = `请求失败: ${err}`;
+      }
+    });
+  </script>
+</body>
+</html>
