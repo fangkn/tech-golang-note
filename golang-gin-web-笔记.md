@@ -15,7 +15,7 @@
 
 golang 的安装： 
 
-见 [](./golang-基础.md) 有安装步骤。
+见 [golang 基础](./golang-基础.md) 有安装步骤。
 
 Gin 安装： 
 
@@ -334,9 +334,9 @@ v2 := r.Group("/v2")
 > curl http://127.0.0.1:8080/v2/gameplayer
 {"path":"/v2/gameplayer"}
 > curl http://127.0.0.1:8080/v1/bag
-{"path":"/v1/bag"}%
+{"path":"/v1/bag"}
 > curl http://127.0.0.1:8080/v2/bag
-{"path":"/v2/bag"}%
+{"path":"/v2/bag"}
 ```
 
 ##  中间件
