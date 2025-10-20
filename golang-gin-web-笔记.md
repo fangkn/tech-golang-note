@@ -1,38 +1,31 @@
 
-# 简介
+
+# Gin 笔记
 
  Gin 是使用 golang 实现的 http web 框架。特点： 接口简洁、性能极高。
 
-特性： 
+##  Gin 特性
 
-1、 快速。 不用反射，基于 radix，内存战用少。 
-2、中间件。 请求会经过一系列中间件处理，提高了框架的可扩展性。
-3、异常处理。Gin 可以捕获 panic，并恢复， 服务始终可用，不会宕机。
-4、 json 。 Gin 可以解析并验证请求的 json。
-5、路径分组。 不同版本的API分组，分组可嵌套，性能不受影响。
-6、渲染内置。 原生支持 json xml 和 html 渲染。 
+1、路由快速，不用反射，内在占用, 且可分组。 
+2、中间件机制，提高可提扩展性，HTTP请求，可先经过一系列中间件处理，例如：Logger，Authorization，GZIP等。
+3、异常处理，服务始终可用，捕获 panic，不会宕机。而且有极为便利的机制处理HTTP请求过程中发生的错误。
+4、JSON：Gin可以解析并验证请求的JSON。这个特性对Restful API的开发尤其有用。也支持渲染XML和HTML的渲染。
 
-# 安装
+## 安装
 
-**go 的安装**
+golang 的安装： 
 
-[[golang-基础]]  有安装步骤。
+见 [](./golang-基础.md) 有安装步骤。
 
-**Gin 安装**
+Gin 安装： 
 
-下载地址：
 ```shell 
 go get -u -v github.com/gin-gonic/gin
 ```
 
-**hello world** 
-
 第一个测试程序： hello world 
 
 ```go
-// geektutu.com
-
-// main.go
 
 package main
 import "github.com/gin-gonic/gin"
@@ -41,10 +34,10 @@ func main() {
 
 	r := gin.Default()
 	r.GET("/", func(c *gin.Context) {
-		c.String(200, "Hello, xyecho!")
+		c.String(200, "Hello, Gin World !")
 	})
 
-	r.Run() // listen and serve on 0.0.0.0:8080
+	r.Run() 
 }
 ```
 
@@ -55,7 +48,7 @@ func main() {
 3、`r.Run()`  监控端口并把实例跑起来了。如：`r.Run(":1024")`。
 
 
-# 定义 HTTP 配置
+## 定义 HTTP 配置
 
 定义写超时，读超时等等 如下：
 
@@ -753,6 +746,11 @@ func main() {
 - [https://geektutu.com/post/quick-go-gin.html](https://geektutu.com/post/quick-go-gin.html
 -   [Golang Gin - Github](https://github.com/gin-gonic/gin)
 - [https://gin-gonic.com/zh-cn/docs/](https://gin-gonic.com/zh-cn/docs/)
+
+
+## 学习资源
+
+1、[Go Gin 简明教程](https://geektutu.com/post/quick-go-gin.html)
 
 项目学习 
 
