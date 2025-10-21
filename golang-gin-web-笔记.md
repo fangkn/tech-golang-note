@@ -494,9 +494,9 @@ r.POST("/batchupload", func(c *gin.Context) {
 ``` 
  见 [gin-upload-file demo](./gin-upload-file/main.go) 
 
-#  JSON
+## JSON	
 
-# JSONP
+## JSONP
 
 使用 JSONP 向不同域的服务器请求数据。如果查询参数存在回调，则将回调添加到响应体中。
 
@@ -519,7 +519,7 @@ func main() {
 }
 ```
 
-# SecureJSON
+## SecureJSON
 
 使用 SecureJSON 防止 json 劫持。如果给定的结构是数组值，则默认预置 `"while(1),"` 到响应体。是否可以指定其他的？ 
 
@@ -574,7 +574,7 @@ func main() {
 
 gin html 模板渲染就是通过加载 html 模板，然后进行变量替代。
 
-加载模板文件 是通过 LoadHTMLGlob() 函数。 如下：
+加载模板文件 是通过 `LoadHTMLGlob()` 函数。 如下：
 
 ```go
 package main
@@ -613,7 +613,7 @@ http://127.0.0.1:8080/index
 
 Gin 默认允许只使用一个 html 模板。 查看[多模板渲染](https://github.com/gin-contrib/multitemplate) 以使用 go 1.6 `block template` 等功能。
 
-# 日志
+## 日志
 
 把输入到屏幕的日志全部打印到日志文件中
 
@@ -714,7 +714,7 @@ func main() {
 }
 ```
 
-# 运行多个服务
+## 运行多个服务
 
 通过 go 协程可以绑定并启多个服务。
 
@@ -811,36 +811,7 @@ func main() {
 
 
 静态资源嵌入使用 [go-assets](https://github.com/jessevdk/go-assets) 将静态资源打包到可执行文件中。
-# 资料
 
-中文学习路径：[https://www.topgoer.com/gin框架/](https://www.topgoer.com/gin%E6%A1%86%E6%9E%B6/)
-
-快速入门：
-- [https://geektutu.com/post/quick-go-gin.html](https://geektutu.com/post/quick-go-gin.html
--   [Golang Gin - Github](https://github.com/gin-gonic/gin)
-- [https://gin-gonic.com/zh-cn/docs/](https://gin-gonic.com/zh-cn/docs/)
-
-
-## 学习资源
-
-1、[Go Gin 简明教程](https://geektutu.com/post/quick-go-gin.html)
-
-项目学习 
-
-https://github.com/go-admin-team/go-admin/blob/master/README.Zh-cn.md
-
-Gin 源码分析系列之 Engine 篇：[https://zhuanlan.zhihu.com/p/372097558](https://zhuanlan.zhihu.com/p/372097558)
-##### 使用 [Gin](https://github.com/gin-gonic/gin) web 框架的知名项目：
-
--   [gorush](https://github.com/appleboy/gorush)：Go 编写的通知推送服务器。
--   [fnproject](https://github.com/fnproject/fn)：原生容器，云 serverless 平台。
--   [photoprism](https://github.com/photoprism/photoprism)：由 Go 和 Google TensorFlow 提供支持的个人照片管理工具。
--   [krakend](https://github.com/devopsfaith/krakend)：拥有中间件的超高性能 API 网关。
--   [picfit](https://github.com/thoas/picfit)：Go 编写的图像尺寸调整服务器。
--   [gotify](https://github.com/gotify/server)：使用实时 web socket 做消息收发的简单服务器。
--   [cds](https://github.com/ovh/cds)：企业级持续交付和 DevOps 自动化开源平台。
--   [go-admin](https://github.com/go-admin-team/go-admin): 前后端分离的中后台管理系统脚手架。
-# 备忘
 
 ## 优雅地重启或停止
 
@@ -861,8 +832,39 @@ Python 的 `Flask`框架，有 _debug_ 模式，启动时传入 _debug=True_
 
 将 request body 绑定到不同的结构体中 https://gin-gonic.com/zh-cn/docs/examples/bind-body-into-dirrerent-structs/
 
- 模型绑定和验证： https://gin-gonic.com/zh-cn/docs/examples/binding-and-validation/
+模型绑定和验证： https://gin-gonic.com/zh-cn/docs/examples/binding-and-validation/
 
- 支持 Let's Encrypt https://gin-gonic.com/zh-cn/docs/examples/support-lets-encrypt/
+支持 Let's Encrypt https://gin-gonic.com/zh-cn/docs/examples/support-lets-encrypt/
+
+
+## 资料
+
+中文学习路径：[https://www.topgoer.com/gin框架/](https://www.topgoer.com/gin%E6%A1%86%E6%9E%B6/)
+
+[Go Gin 简明教程](https://geektutu.com/post/quick-go-gin.html)
+
+快速入门：
+
+- [https://geektutu.com/post/quick-go-gin.html](https://geektutu.com/post/quick-go-gin.html
+-  [Golang Gin - Github](https://github.com/gin-gonic/gin)
+- [https://gin-gonic.com/zh-cn/docs/](https://gin-gonic.com/zh-cn/docs/)
+
+项目学习 
+
+https://github.com/go-admin-team/go-admin/blob/master/README.Zh-cn.md
+
+Gin 源码分析系列之 Engine 篇：[https://zhuanlan.zhihu.com/p/372097558](https://zhuanlan.zhihu.com/p/372097558)
+
+使用 [Gin](https://github.com/gin-gonic/gin) web 框架的知名项目：
+
+-   [gorush](https://github.com/appleboy/gorush)：Go 编写的通知推送服务器。
+-   [fnproject](https://github.com/fnproject/fn)：原生容器，云 serverless 平台。
+-   [photoprism](https://github.com/photoprism/photoprism)：由 Go 和 Google TensorFlow 提供支持的个人照片管理工具。
+-   [krakend](https://github.com/devopsfaith/krakend)：拥有中间件的超高性能 API 网关。
+-   [picfit](https://github.com/thoas/picfit)：Go 编写的图像尺寸调整服务器。
+-   [gotify](https://github.com/gotify/server)：使用实时 web socket 做消息收发的简单服务器。
+-   [cds](https://github.com/ovh/cds)：企业级持续交付和 DevOps 自动化开源平台。
+-   [go-admin](https://github.com/go-admin-team/go-admin): 前后端分离的中后台管理系统脚手架。
+
 
 
