@@ -494,83 +494,153 @@ r.POST("/batchupload", func(c *gin.Context) {
 ``` 
  见 [gin-upload-file demo](./gin-upload-file/main.go) 
 
-## JSON	
+## JSON, JSONP, SecureJSON,PureJSON
 
-## JSONP
 
-使用 JSONP 向不同域的服务器请求数据。如果查询参数存在回调，则将回调添加到响应体中。
+** JSONP **
+
+使用 JSONP 向不同域的服务器请求数据。如果查询参数存在回调，则将回调添加到响应体中。是用于跨域请求数据的技术。 	
+
+浏览器出于安全原因（同源策略），默认不允许 JavaScrip发起跨域的 XMLHttpRequest 请求。
+但是 `<script>` 标签是个“特例”——它可以加载任意域名的脚本文件。
+
+好处是： 跨域访问数据， 兼容老浏览器 早期不支持 CORS。 
+
+运用的场景有： 
+
+- 跨域获取第三方API数据。 网页上显示天气：https://api.weather.com/data?callback=showWeather	
+- 嵌入外部统计或评论系统。 例如早期的百度统计、Disqus 评论都用 JSONP 拉取数据
+- 广告系统或新闻聚合。 页面嵌入 `<script>` 加载远程广告、新闻、推荐列表.
+
+替代方案： 现在推荐使用 CORS（跨域资源共享）。 
+
+** SecureJSON  **
+
+使用 SecureJSON 防止 json 劫持。如果给定的结构是数组值，则默认预置 `"while(1),"` 到响应体。
+
+JSON 劫持 是一种前端安全漏洞攻击方式。
+攻击者会利用浏览器的特性，通过 `<script>` 签跨域请求接口，从而窃取返回的 JSON 数据。
+这在接口直接返回数组的情况下尤其危险！
+
+```html
+<script>
+    function steal(data) {
+        alert("偷到数据: " + data);
+    }
+</script>
+<script src="https://127.0.0.1:8080/users?callback=steal"></script>
+```
+
+** PureJSON  **
+
+Gin 默认的 JSON() 会转义 HTML 特殊字符，例如 < 变为 \ u003c。如果要按字面对这些字符进行编码，则可以使用 PureJSON。Go 1.6 及更低版本无法使用此功能。
+
+如： 
+
+```golang
+c.JSON(http.StatusOK, gin.H{
+	"html": "<b>Hello</b>",
+})
+
+// {"html":"\u003cb\u003eHello\u003c/b\u003e"}
+```
+PureJSON() 与 JSON() 的唯一区别就是：它不会转义 HTML 标签，而是返回原始内容. 
+
+```json 
+{"html":"<b>Hello</b>"}
+
+```
+代码：
 
 ```go
-func main() {
-	r := gin.Default()
 
-	r.GET("/JSONP", func(c *gin.Context) {
-		data := map[string]interface{}{
-			"foo": "bar",
+	// 返回 JSON
+	router.GET("/json", func(c *gin.Context) {
+		data := gin.H{
+			"message": "Hello, JSON!",
+			"status":  "success",
 		}
-		
-		// /JSONP?callback=x
-		// 将输出：x({\"foo\":\"bar\"})
+		c.JSON(http.StatusOK, data)
+	})
+
+	// 返回 JSONP
+	router.GET("/jsonp", func(c *gin.Context) {
+		data := gin.H{
+			"message": "Hello, JSONP!",
+			"status":  "success",
+		}
+		// JSONP 需要传 callback 参数，例如：/jsonp?callback=foo
 		c.JSONP(http.StatusOK, data)
 	})
 
-	// 监听并在 0.0.0.0:8080 上启动服务
-	r.Run(":8080")
-}
+	// 返回 SecureJSON
+	router.GET("/securejson", func(c *gin.Context) {
+		data := []string{"Go", "Gin", "Gopher"}
+		// SecureJSON 会在 JSON 前加上前缀 "while(1);" 防止 JSON 劫持
+		c.SecureJSON(http.StatusOK, data)
+	})
 ```
 
-## SecureJSON
+例子程序 ： [gin-json](./gin-json/main.go)
 
-使用 SecureJSON 防止 json 劫持。如果给定的结构是数组值，则默认预置 `"while(1),"` 到响应体。是否可以指定其他的？ 
+## jsonp 和 CORS 的跨域
+
+旧版本的浏览器可能不支持CORS ，所以只能用 JSONP 来跨域请求数据。
+CORS 的跨域方式
 
 ```go
-func main() {
-	r := gin.Default()
+ 启用 CORS 支持（允许现代浏览器跨域）
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"}, // 可改为具体域名，例如 ["https://yourdomain.com"]
+		AllowMethods:     []string{"GET", "POST"},
+		AllowHeaders:     []string{"Origin", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
-	// 你也可以使用自己的 SecureJSON 前缀
-	// r.SecureJsonPrefix(")]}',\n")
+	定义一个统一的接口，自动支持 JSON + JSONP
+	r.GET("/data", func(c *gin.Context) {
+		data := gin.H{
+			"message": "Hello from Gin!",
+			"version": "1.0",
+			"source":  "Gin JSONP + CORS",
+		}
 
-	r.GET("/someJSON", func(c *gin.Context) {
-		names := []string{"lena", "austin", "foo"}
-
-		// 将输出：while(1);["lena","austin","foo"]
-		c.SecureJSON(http.StatusOK, names)
+		// 如果有 callback 参数，则返回 JSONP，否则返回 JSON
+		callback := c.Query("callback")
+		if callback != "" {
+			c.JSONP(http.StatusOK, data)
+		} else {
+			c.JSON(http.StatusOK, data)
+		}
 	})
 
-	// 监听并在 0.0.0.0:8080 上启动服务
-	r.Run(":8080")
-}
 ```
 
-# PureJSON
+见 [gin-jsonp-cors](./gin-jsonp-cors/main.go)
 
-常，JSON 使用 unicode 替换特殊 HTML 字符，例如 < 变为 \ u003c。如果要按字面对这些字符进行编码，则可以使用 PureJSON。Go 1.6 及更低版本无法使用此功能。
+前端调用情况：
 
-```go
-func main() {
-	r := gin.Default()
-	
-	// 提供 unicode 实体
-	r.GET("/json", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"html": "<b>Hello, world!</b>",
-		})
-	})
-	
-	// 提供字面字符
-	r.GET("/purejson", func(c *gin.Context) {
-		c.PureJSON(200, gin.H{
-			"html": "<b>Hello, world!</b>",
-		})
-	})
-	
-	// 监听并在 0.0.0.0:8080 上启动服务
-	r.Run(":8080")
-}
+```js 
+fetch("http://localhost:8080/data")
+  .then(res => res.json())
+  .then(data => console.log("CORS JSON 返回：", data));
 ```
+旧浏览器，使用 `<script>`
 
+```html 
+<script>
+  function myFunc(data) {
+    console.log("JSONP 返回：", data);
+  }
 
-#  html 模板渲染
+  const script = document.createElement("script");
+  script.src = "http://localhost:8080/data?callback=myFunc";
+  document.body.appendChild(script);
+</script>
+
+```
+##  html 模板渲染
 
 gin html 模板渲染就是通过加载 html 模板，然后进行变量替代。
 
@@ -808,7 +878,6 @@ func main() {
 	router.Run(":8080")
 }
 ```
-
 
 静态资源嵌入使用 [go-assets](https://github.com/jessevdk/go-assets) 将静态资源打包到可执行文件中。
 
