@@ -886,6 +886,8 @@ func main() {
 
 使用 [fvbock/endless](https://github.com/fvbock/endless) 来替换默认的 `ListenAndServe`
 
+见 [golang-endless服务优雅退出.md](./golang-endless服务优雅退出.md)
+
 替代方案:
 
 -   [manners](https://github.com/braintree/manners)：可以优雅关机的 Go Http 服务器。
