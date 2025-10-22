@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/fvbock/endless"
@@ -23,8 +24,24 @@ func main() {
 		c.String(http.StatusOK, "Hello, Gin World!")
 	})
 	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "pong"})
+		//c.JSON(http.StatusOK, gin.H{"message": "pong001"})
+		c.JSON(http.StatusOK, gin.H{"message": "pong002"})
+
 	})
+
+	router.GET("/sleep/:sec", func(c *gin.Context) {
+		sec, _ := strconv.Atoi(c.Param("sec"))
+
+		log.Printf("sleep %d seconds", sec)
+
+		time.Sleep(time.Duration(sec) * time.Second)
+
+		//log.Printf("sleep %d seconds---001", sec)
+		//c.String(http.StatusOK, "done-001")
+		log.Printf("sleep %d seconds---002", sec)
+		c.String(http.StatusOK, "done-002")
+	})
+
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "route not found"})
 	})
@@ -34,8 +51,8 @@ func main() {
 	// endless.NewServer 返回可热重启的 Server
 	srv := endless.NewServer(addr, router)
 	// 优先使用实例级超时配置，而不是全局默认值
-	srv.ReadTimeout = 10 * time.Second
-	srv.WriteTimeout = 10 * time.Second
+	srv.ReadTimeout = 111 * time.Second
+	srv.WriteTimeout = 111 * time.Second
 	srv.MaxHeaderBytes = 1 << 20
 
 	srv.BeforeBegin = func(add string) {
