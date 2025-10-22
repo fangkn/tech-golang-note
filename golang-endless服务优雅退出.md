@@ -100,9 +100,7 @@ curl http://localhost:8080/sleep/50
 
 ```
 
-在 50 秒内 执行以下合集， 重启中 ，服务终端日志输出：
-
-在另一个终端执行 `kill -HUP 64112` ，服务终端日志输出：
+在 50 秒内，在另一个终端执行 `kill -HUP 64112` ，服务终端日志输出：
 ```sh 
 2025/10/22 15:00:17 64112 Received SIGHUP. forking.
 [GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
@@ -121,7 +119,7 @@ curl http://localhost:8080/sleep/50
 
 ```
 这里说明服务已经收到信息，要退出，但是在等待所有请求处理完成。`Waiting for connections to finish...`
-新的端口已被新服务所用。 
+端口已被新服务所占用。 
 
 可以请求一下 ping 接口。
 
@@ -129,7 +127,7 @@ curl http://localhost:8080/sleep/50
 ➜  ~ curl http://localhost:8080/ping
 {"message":"pong002"}
 ```
-返回了 pong002 说明服务已更新。旧的服务是 pong001
+返回了 pong002 说明服务已更新, 旧的服务是 pong001.
 
 等 50 秒时间后，服务终端日志输出：
 
@@ -141,10 +139,9 @@ curl http://localhost:8080/sleep/50
 2025/10/22 15:01:01 server gracefully stopped
 
 ```
+说明， 旧的服务处理完成 sleep 接口的请求了，注意这里的输出是： `sleep 50 seconds---001` 是旧的服务。新是已经更新成 `sleep 50 seconds---002`
 
-说明， 旧的服务处理完成sleep 接口的请求了，注意这里的输出是： `sleep 50 seconds---001` 是旧的服务。新是已经更新成 `sleep 50 seconds---002`
-
-这个是执行的流程说了， endless 是可以优雅的执行重启的。不会损坏服务的逻辑的完整性的。 
+这个执行的流程说了，endless 是可以优雅的执行重启的。不会损坏服务的逻辑的完整性的。 
 
 
 
