@@ -1,0 +1,6 @@
+go.work
+go.work.sum
+logs/*
+*.exe 
+tmp/*
+go-air-service

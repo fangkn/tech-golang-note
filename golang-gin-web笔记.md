@@ -890,14 +890,28 @@ func main() {
 
 替代方案:
 
--   [manners](https://github.com/braintree/manners)：可以优雅关机的 Go Http 服务器。
--   [graceful](https://github.com/tylerb/graceful)：Graceful 是一个 Go 扩展包，可以优雅地关闭 http.Handler 服务器。
--   [grace](https://github.com/facebookgo/grace)：Go 服务器平滑重启和零停机时间部署。
+- [manners](https://github.com/braintree/manners)：可以优雅关机的 Go Http 服务器。
+- [graceful](https://github.com/tylerb/graceful)：Graceful 是一个 Go 扩展包，可以优雅地关闭 http.Handler 服务器。
+- [grace](https://github.com/facebookgo/grace)：Go 服务器平滑重启和零停机时间部署。
 
 
 ## 热加载调试 Hot Reload
 
 Python 的 `Flask`框架，有 _debug_ 模式，启动时传入 _debug=True_ 就可以热加载(Hot Reload, Live Reload)了。即更改源码，保存后，自动触发更新，浏览器上刷新即可。免去了杀进程、重新启动之苦。
+
+这种热加载在生产环境中基本是要禁止使用的， 生产环境的稳定性，不能允许改完代码直接生效。 
+
+它的一个好处是，在开发环境中， 可以实时看到代码的变化，而不需要重启服务，提高开发效率。
+
+有一个库，可以实现热加载调试。
+
+[air](https://github.com/air-verse/air)：Go 应用的实时热重载工具。
+
+文档说明：[https://github.com/air-verse/air/blob/master/README-zh_cn.md](https://github.com/air-verse/air/blob/master/README-zh_cn.md)
+
+例子见：[hot-reload-air](./hot-reload-air/readme.md)
+
+
 
 ## 绑定
 
@@ -912,21 +926,21 @@ Python 的 `Flask`框架，有 _debug_ 模式，启动时传入 _debug=True_
 
 中文学习路径：[https://www.topgoer.com/gin框架/](https://www.topgoer.com/gin%E6%A1%86%E6%9E%B6/)
 
-[Go Gin 简明教程](https://geektutu.com/post/quick-go-gin.html)
+Go Gin 简明教程： [https://geektutu.com/post/quick-go-gin.html](https://geektutu.com/post/quick-go-gin.html)
 
 快速入门：
 
-- [https://geektutu.com/post/quick-go-gin.html](https://geektutu.com/post/quick-go-gin.html
--  [Golang Gin - Github](https://github.com/gin-gonic/gin)
+- [https://geektutu.com/post/quick-go-gin.html](https://geektutu.com/post/quick-go-gin.html)
+- [Golang Gin - Github](https://github.com/gin-gonic/gin)
 - [https://gin-gonic.com/zh-cn/docs/](https://gin-gonic.com/zh-cn/docs/)
 
-项目学习 
+项目学习：
 
-https://github.com/go-admin-team/go-admin/blob/master/README.Zh-cn.md
+go-admin 有点重了。[https://github.com/go-admin-team/go-admin/blob/master/README.Zh-cn.md](https://github.com/go-admin-team/go-admin/blob/master/README.Zh-cn.md)
 
 Gin 源码分析系列之 Engine 篇：[https://zhuanlan.zhihu.com/p/372097558](https://zhuanlan.zhihu.com/p/372097558)
 
-使用 [Gin](https://github.com/gin-gonic/gin) web 框架的知名项目：
+使用 Gin web 框架的知名项目：
 
 -   [gorush](https://github.com/appleboy/gorush)：Go 编写的通知推送服务器。
 -   [fnproject](https://github.com/fnproject/fn)：原生容器，云 serverless 平台。
