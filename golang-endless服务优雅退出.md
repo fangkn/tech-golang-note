@@ -1,5 +1,5 @@
 
-## 优雅退出
+## 服务优雅退出
 
 要求是：服务要退出时，要等待所有请求处理完成，再退出。
 
@@ -7,7 +7,7 @@ golang 的服务可以用 endless 库来实现优雅退出。地址：[https://g
 
 ## 运用
 
-可以参考例子： [gin-http-endless](./gin-http-endless/main.go)
+可以参考例子: [gin-http-endless](./gin-http-endless/main.go)
 
 ```golang 
 
@@ -18,7 +18,11 @@ golang 的服务可以用 endless 库来实现优雅退出。地址：[https://g
 		log.Printf("sleep %d seconds", sec)
 
 		time.Sleep(time.Duration(sec) * time.Second)
-		c.String(http.StatusOK, "done")
+
+		//log.Printf("sleep %d seconds---001", sec)
+		//c.String(http.StatusOK, "done-001")
+		log.Printf("sleep %d seconds---002", sec)
+		c.String(http.StatusOK, "done-002")
 	})
 
     addr := ":8080"
@@ -26,8 +30,8 @@ golang 的服务可以用 endless 库来实现优雅退出。地址：[https://g
 	// endless.NewServer 返回可热重启的 Server
 	srv := endless.NewServer(addr, router)
 	// 优先使用实例级超时配置，而不是全局默认值
-	srv.ReadTimeout = 10 * time.Second
-	srv.WriteTimeout = 10 * time.Second
+	srv.ReadTimeout = 111 * time.Second
+	srv.WriteTimeout = 111 * time.Second
 	srv.MaxHeaderBytes = 1 << 20
 
 	srv.BeforeBegin = func(add string) {
