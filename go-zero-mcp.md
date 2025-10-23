@@ -1,4 +1,4 @@
-# golang go-zore mcp 
+## golang go-zore mcp 
 
 mcp 的原理，是通过 http 协议，将请求发送到 mcp server，mcp server 会根据请求，调用对应的工具，工具的执行结果，会返回给 mcp server，mcp server 会将结果返回给请求方。
 
@@ -10,6 +10,56 @@ mcp 的原理，是通过 http 协议，将请求发送到 mcp server，mcp serv
 
 代码：[go-zore-mcp-demo](https://github.com/fangkn/tech-golang-note/tree/main/source/go-zore-mcp-demo)
 
+
+## 代码分析
+
+大致的流程如下：
+
+1. 创建 MCP 服务器
+2. 定义 MCP 工具
+3. 注册工具到服务器
+4. 启动 MCP 服务器
+
+重点关注的地方是 `mpc.Tool` 结构体。 
+
+```go
+type Tool struct {
+	Name        string      `json:"name"`        // Unique identifier for the tool
+	Description string      `json:"description"` // Human-readable description
+	InputSchema InputSchema `json:"inputSchema"` // JSON Schema for parameters
+	Handler     ToolHandler `json:"-"`           // Not sent to clients
+}
+
+```
+
+- Name : 工具的名字,外部调用时会用到这个名字
+- Description : 工具的简介,说明它能做什么，便于在列表或帮助里展示.
+- InputSchema : 描述了工具需要的参数、参数的类型、哪些必填
+- Handler : 真正执行逻辑的函数， 当外部调用时，会调用这个函数，函数的参数是根据 InputSchema 解析出来的。
+
+这里重点要理解是 `InputSchema` 和 `ToolHandler` 这两个字段。
+
+写一个mcp 服务，主要要实现的就是这两个字段了。 
+
+```go
+type InputSchema struct {
+	Type       string         `json:"type"`
+	Properties map[string]any `json:"properties"`         // Property definitions
+	Required   []string       `json:"required,omitempty"` // List of required properties
+}
+```
+- Type : 这个 字段是什么意思？ 没有说明。 demo 也没有用到？ 
+- Properties： 一个键值对，定义每个参数的规格。 每个参数有自己的名字、类型、描述等。
+- Required： 一个字符串数组，列出哪些参数是必填的。
+
+Properties： 对每个键值对有以下字段：
+- type：参数的类型，如 "string", "number", "boolean" 等。
+- description：参数的详细描述，帮助用户理解参数的作用。
+- example：参数的示例值，展示参数的典型使用场景。
+
+
+## 编译运行
+
 编译完成之后，运行 `./calculator-assistant` 即可。
 
 ```sh
@@ -18,6 +68,7 @@ mcp 的原理，是通过 http 协议，将请求发送到 mcp server，mcp serv
 启动 MCP 服务器，端口: 8080
 
 ```
+## 配置 mcp server
 
 在 trae 配置 mcp server。 
 
