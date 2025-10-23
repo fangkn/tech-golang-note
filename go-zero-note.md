@@ -135,7 +135,7 @@ https://juejin.cn/post/7272581426331254839
 打包失败，如下：
 
 ```
-s# go.opentelemetry.io/otel/internal/global
+# go.opentelemetry.io/otel/internal/global
 
 [99](https://gitlab.vrviu.com/cag/cag-proxy/-/jobs/227002#L99)/go/pkg/mod/go.opentelemetry.io/otel@v1.19.0/internal/global/handler.go:44:18: undefined: atomic.Pointer
 

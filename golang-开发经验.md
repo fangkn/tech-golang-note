@@ -163,7 +163,7 @@ mapConf["game"]为nil：如果mapConf["game"]是 nil，那么在尝试进行类�
 **错误：invalid version: git ls-remote -q origin in**
 
 ```
-internal\logic\checkPhoneCaptchaLogic.go:16:2: gitlab.vrviu.com/cloud_esport_backend/saas_user_server@v0.0.0-20240524031850-03bf96fbcf45: invalid version: git ls-remote -q origin in C:\Users\kane\go\pkg\mod\cache\vcs\b6d3346b9a08a643b6538f20717fbbcf2a9651f4d8a8922abe6346170ec83489: exit status 128:
+internal\logic\checkPhoneCaptchaLogic.go:16:2: ************/saas_user_server@v0.0.0-20240524031850-03bf96fbcf45: invalid version: git ls-remote -q origin in C:\Users\kane\go\pkg\mod\cache\vcs\b6d3346b9a08a643b6538f20717fbbcf2a9651f4d8a8922abe6346170ec83489: exit status 128:
         warning: missing OAuth configuration for gitlab.vrviu.com - see https://aka.ms/gcm/gitlab for more information
         fatal: Cannot prompt because user interactivity has been disabled.
         fatal: could not read Username for 'https://gitlab.vrviu.com': terminal prompts disabled

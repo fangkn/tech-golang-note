@@ -191,7 +191,7 @@ The commands are:
 **指定分支的库**
 
 ```
-go get  gitlab.vrviu.com/diskless_stack/instance_service/types@分支名
+go get  github.com/fangkn/demo/types@分支名
 ```
 
 ## go toolchain
