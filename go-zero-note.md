@@ -95,7 +95,7 @@ goctl rpc protoc wx-proxy.proto  --go_out=. --go-grpc_out=. --zrpc_out=. -style 
 
 https://go-zero.dev/docs/tutorials/go-zero/configuration/prometheus
 
-https://juejin.cn/post/7044509187027501063
+https://juejin.cn/post/7044509187027501063  
 
 https://juejin.cn/post/7453286540157943858#heading-2
 
@@ -120,7 +120,11 @@ go_gc_duration_seconds{quantile="1"} 0.00028536
 
 ```
 
+http://127.0.0.1:9090/targets 查看 是否已经注册到 prometheus 中。 
 
+![](./assets/prometheus-2025-11-07_18-11-26.png)
+
+https://zhuanlan.zhihu.com/p/653999111
 
 ## RPC 
 
