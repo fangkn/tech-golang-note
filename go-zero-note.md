@@ -1,7 +1,7 @@
 
 
 
-# go-zero 资源
+## go-zero 资源
 
 go-zero 教程 ：https://go-zero.dev/docs/concepts/overview
 
@@ -9,7 +9,7 @@ go-zero 周边 ： https://go-zero.dev/docs/reference/examples
 
 go-zero-looklook  https://github.com/Mikaelemmmm/go-zero-looklook
 
-# go-zero 安装 
+## go-zero 安装 
 
 window 安装 
 
@@ -54,7 +54,7 @@ $ go get -u github.com/zeromicro/go-zero@latest
 
 
 
-# go-zero 配置 config
+## go-zero 配置 config
 
 go-zero 支持三种格式的文件： yam, json, toml 
 
@@ -76,7 +76,7 @@ conf 目前已经默认自动支持 key 大小写不敏感。
 tag 的 inherit  功能会不会把配置文件搞复杂了？
 
 
-# go-zero 常用命令
+## go-zero 常用命令
 
 ```
 goctl api go -api hello.api -dir .
@@ -88,16 +88,39 @@ api 生成代码的命令：
 goctl api go -api user.api -dir . -style goZero 
 goctl api go  -dir . -style goZero  -api user.api
 
-goctl rpc protoc cag-wx-proxy.proto  --go_out=. --go-grpc_out=. --zrpc_out=. -style goZero
+goctl rpc protoc wx-proxy.proto  --go_out=. --go-grpc_out=. --zrpc_out=. -style goZero
 ```
 
-go-zore 配置 prometheus 
+## 配置 prometheus 
 
 https://go-zero.dev/docs/tutorials/go-zero/configuration/prometheus
 
 https://juejin.cn/post/7044509187027501063
 
-# go-zore 开发经验
+https://juejin.cn/post/7453286540157943858#heading-2
+
+```yaml 
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9092
+  Path: /metrics
+
+```
+
+```sh 
+curl http://127.0.0.1:15844/metrics
+# HELP go_gc_duration_seconds A summary of the pause duration of garbage collection cycles.
+# TYPE go_gc_duration_seconds summary
+go_gc_duration_seconds{quantile="0"} 2.3299e-05
+go_gc_duration_seconds{quantile="0.25"} 0.000141661
+go_gc_duration_seconds{quantile="0.5"} 0.000185955
+go_gc_duration_seconds{quantile="0.75"} 0.000251768
+go_gc_duration_seconds{quantile="1"} 0.00028536
+......
+
+```
+
+
 
 ## RPC 
 
