@@ -9,6 +9,8 @@ go-zero 周边 ： https://go-zero.dev/docs/reference/examples
 
 go-zero-looklook  https://github.com/Mikaelemmmm/go-zero-looklook
 
+B站的： https://www.bilibili.com/video/BV1vRxzefExM/
+
 ## go-zero 安装 
 
 window 安装 
