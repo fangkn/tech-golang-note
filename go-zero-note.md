@@ -3,13 +3,13 @@
 
 ## go-zero 资源
 
-go-zero 教程 ：https://go-zero.dev/docs/concepts/overview
+go-zero 教程 ：[https://go-zero.dev/docs/concepts/overview](https://go-zero.dev/docs/concepts/overview)
 
-go-zero 周边 ： https://go-zero.dev/docs/reference/examples
+go-zero 周边 ： [https://go-zero.dev/docs/reference/examples](https://go-zero.dev/docs/reference/examples)
 
-go-zero-looklook  https://github.com/Mikaelemmmm/go-zero-looklook
+go-zero-looklook  [https://github.com/Mikaelemmmm/go-zero-looklook](https://github.com/Mikaelemmmm/go-zero-looklook)
 
-B站的： https://www.bilibili.com/video/BV1vRxzefExM/
+B站的：[https://www.bilibili.com/video/BV1vRxzefExM/]( https://www.bilibili.com/video/BV1vRxzefExM/)
 
 ## go-zero 安装 
 
