@@ -21,9 +21,6 @@ golang 语言开发学习笔记。记录学习过程的笔记和开发时遇到�
 
 - 一个高性能协程池，指定池中协程的数量，使用时直接从池中取即可，不用去创建。用完池子会回收。[https://github.com/panjf2000/ants]( https://github.com/panjf2000/ants)
 
-- ansible-semaphore: https://github.com/ansible-semaphore/semaphore
-
-- golang 生成惟一的uuid 的方法：https://github.com/segmentio/ksuid
 
 - 拷贝 结构体：[https://github.com/spf13/viper](http://github.com/jinzhu/copier) 
 
