@@ -33,7 +33,7 @@ golang 语言开发学习笔记。记录学习过程的笔记和开发时遇到�
 
 -NilAway 是一种静态分析工具，旨在通过在编译时而不是运行时捕获 nil 恐慌来帮助开发人员避免生产中出现 nil 恐慌。[https://github.com/uber-go/nilaway](https://github.com/uber-go/nilaway)
 
-
+    
 # 资源
 
 - awesome-go ：[https://github.com/avelino/awesome-go](https://github.com/avelino/awesome-go)
