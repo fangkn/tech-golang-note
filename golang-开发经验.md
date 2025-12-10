@@ -1,4 +1,4 @@
-# 多版本问题
+**golang 编译多版本问题**
 
 遇到一个问题如下：
 
@@ -11,13 +11,13 @@ compile: version "go1.20.1" does not match go tool version "go1.18.2"
 
 原因是系统的go 版本是 `go1.18.2` 而第三方库要求的是 `go1.20.1`。  
 
-系统安装了多个版本的 go 。而被使用是 `go1.18.2`。由于这个版本其他同事可能在使用，
+系统安装了多个版本的 go, 而被使用是 `go1.18.2`。由于这个版本其他同事可能在使用，
 
 所以想在不影响他人使用 `go1.18.2`的情况下，在我自己的用户下使用 `go1.20.1`
 
 试着把 `go1.20.1` 的路径配置到用户下的 `.bashrc` 或 `.profile`。
 
-直接执行 `go verison` 可使用 `go1.20.1` 。但是在makefile 时，却还是使用了 `go1.18.2`的版本。
+直接执行 `go verison` 可使用 `go1.20.1` 。但是在 makefile 时，却还是使用了 `go1.18.2`的版本。
 
 猜想原因是：makefile 起子shell 环境变量 和 我所在用户环境变量不一样。
 
@@ -25,25 +25,23 @@ compile: version "go1.20.1" does not match go tool version "go1.18.2"
 
 再次尝试，可以使用。
 
-# beego dev note 2023-04-17
+**beego dev note 2023-04-17**
 
 测试时，发现 beego 读取配置文件时，不会实时加载配置文件 ，而是在启动服务时一次加载后，放到 map 中去，然后 beego.AppConfig.String 时再从 map 中取出来。 
 
-from :https://yushuangqi.com/blog/2016/beego-webframework-config.html
+from [beego框架源码解读 config 模块设计](https://yushuangqi.com/blog/2016/beego-webframework-config.html)
 
-一个热加载的问题：https://stackoverflow.com/questions/36078560/how-beegogo-app-framework-will-reload-the-application-if-there-is-any-change-i
-
-https://blog.csdn.net/wangzhufei/article/details/93144116
+一个热加载的问题：[How beego(Go App Framework) will reload the application if there is any change in the conf file?](https://stackoverflow.com/questions/36078560/how-beegogo-app-framework-will-reload-the-application-if-there-is-any-change-i)
 
 查了一下资料， beego 好像无法做热加载配置文件。
 
 beego 框架错误时 panic 返回一些 html 文本。 有些不友好。 
 
-from : [https://www.jianshu.com/p/1eab4b981559](https://www.jianshu.com/p/1eab4b981559)
+from : [Beego框架错误Panic捕获并通过Recover返回正常数据](https://www.jianshu.com/p/1eab4b981559)
 
 
 
-# beego v2  读配置时遇到问题
+**beego v2  读配置时遇到问题**
 
 用 beego v2 想测试一下，实时加载配置的方式： Port := beego.AppConfig.String("mysql_port")
 
@@ -79,7 +77,7 @@ Port := dbMap["mysql_port"]
 
 这个变化还真有点大。
 
-# 对于中文等字符数的判断 
+**对于中文等字符数的判断** 
 
 ```golang
 if len([]rune(req.Name)) > 100
@@ -94,7 +92,7 @@ if len([]rune(req.Name)) > 100
 
 
 
-# 二制进流如何在结构体中定义
+**二制进流如何在结构体中定义**
 
 接入小程序创建二维码时，微信平台返回了一个二维码的二进制流图片。应该如何处理比较合适。
 
@@ -102,15 +100,14 @@ if len([]rune(req.Name)) > 100
 
 > 通过该种方式，我们即不需要在服务器上存储任何图片信息，以造成负担。当然如果有特殊需求的另当别论。
 
-# 编译出现 ： import cycle not allowe
-
+**编译出现 ： import cycle not allowe **
 ```sh
+package wx-proxy
+        imports wx-proxy/internal/config
+        imports wx-proxy/internal/config: import cycle not allowed
 package cag-wx-proxy
-        imports cag-wx-proxy/internal/config
-        imports cag-wx-proxy/internal/config: import cycle not allowed
-package cag-wx-proxy
-        imports cag-wx-proxy/internal/config
-        imports cag-wx-proxy/internal/config: import cycle not allowed
+        imports wx-proxy/internal/config
+        imports wx-proxy/internal/config: import cycle not allowed
         
 # 这个问题是在一个模块引用自己的 package 
 #
@@ -127,20 +124,19 @@ package cag-wx-proxy
 [https://jiajunhuang.com/articles/2022_11_04-grpc_error_handling.md.html](https://jiajunhuang.com/articles/2022_11_04-grpc_error_handling.md.html)
 
 
-# window go mod  权限问题
+**window go mod  权限问题**
 
 安装后，配置在  c:\Program Files 下， go mod tidy  在下载库时，用户没有权限会报错误如下：
 
-  ```cmd
+```cmd
 go: writing go.mod cache: mkdir c:\Program Files\Go\pkg\mod\cache: Access is denied.
 go: writing go.mod cache: mkdir c:\Program Files\Go\pkg\mod\cache: Access is denied.
 
-  ```
+```
 
 对  c:\Program Files\Go 添加当前用户的读写和执行权限
 
-# 对 map 的 value 进行类型转换
-
+**Beego框架错误Panic捕获并通过Recover返回正常数据**
 
 ```go
 	Config1 := mapConf["game"].(map[string]interface{}) // 有问题
