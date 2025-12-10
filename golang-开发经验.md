@@ -137,7 +137,7 @@ go: writing go.mod cache: mkdir c:\Program Files\Go\pkg\mod\cache: Access is den
 对  c:\Program Files\Go 添加当前用户的读写和执行权限
 
 **Beego框架错误Panic捕获并通过Recover返回正常数据**
-
+ 
 ```go
 	Config1 := mapConf["game"].(map[string]interface{}) // 有问题
 	for key, value := range confMap {

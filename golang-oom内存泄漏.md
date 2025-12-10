@@ -47,3 +47,13 @@ golang 中垃圾回收器采用的是“并发三色标记清除”算法:
 
 1、[https://www.hitzhangjie.pro/blog/2021-04-14-go程序内存泄露问题快速定位/](https://www.hitzhangjie.pro/blog/2021-04-14-go程序内存泄露问题快速定位/)
 
+
+38218
+
+http://10.73.240.105:38218/debug/pprof
+
+go tool pprof -seconds=10 -http=:9999 http://10.73.240.105:38118/debug/pprof/heap
+
+curl http://10.73.240.105:38118/debug/pprof/heap?seconds=30 
+
+curl 'http://10.73.240.105:6061/debug/pprof/heap?seconds=30'
