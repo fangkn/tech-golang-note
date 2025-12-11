@@ -9,7 +9,7 @@ golang 的服务可以用 endless 库来实现优雅退出。地址：[https://g
 
 可以参考例子: [gin-http-endless](./gin-http-endless/main.go)
 
-```golang 
+```go 
 
     // 这个接口会阻塞 sec 秒，用于测试优雅退出
 	router.GET("/sleep/:sec", func(c *gin.Context) {
@@ -47,9 +47,7 @@ golang 的服务可以用 endless 库来实现优雅退出。地址：[https://g
 ```
 
 1、用 `endless.NewServer` 定义新的 Server 实例 换掉 `http.Server`
-
 2、写一个阻塞接口，测试优雅退出
-
 3、测试方式：
 
 - 先启动服务

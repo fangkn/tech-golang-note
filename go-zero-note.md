@@ -1,31 +1,26 @@
 
-
-
 ## go-zero 资源
 
-go-zero 教程 ：[https://go-zero.dev/docs/concepts/overview](https://go-zero.dev/docs/concepts/overview)
-
-go-zero 周边 ： [https://go-zero.dev/docs/reference/examples](https://go-zero.dev/docs/reference/examples)
-
-go-zero-looklook  [https://github.com/Mikaelemmmm/go-zero-looklook](https://github.com/Mikaelemmmm/go-zero-looklook)
-
-B站的：[https://www.bilibili.com/video/BV1vRxzefExM/]( https://www.bilibili.com/video/BV1vRxzefExM/)
+1、go-zero 教程 ：[https://go-zero.dev/docs/concepts/overview](https://go-zero.dev/docs/concepts/overview)
+2、go-zero 周边 ： [https://go-zero.dev/docs/reference/examples](https://go-zero.dev/docs/reference/examples)
+3、go-zero-looklook  [https://github.com/Mikaelemmmm/go-zero-looklook](https://github.com/Mikaelemmmm/go-zero-looklook)
+4、B站的：[https://www.bilibili.com/video/BV1vRxzefExM/]( https://www.bilibili.com/video/BV1vRxzefExM/)
 
 ## go-zero 安装 
 
-window 安装 
+**window 安装** 
 
 **golang 安装**
 
 **goctl 安装**  
 
 1、下载：https://github.com/zeromicro/go-zero/releases/download/tools/goctl/v1.5.6/goctl-v1.5.6-windows-amd64.zip
-
 2、解压后添加到 GOPATH， GOPATH查看路径
 
 ```sh 
 $ go env GOPATH
 ```
+
 **protoc 安装** 
 
 通过 goctl 安装， 如下：
@@ -54,15 +49,11 @@ $ go get -u github.com/zeromicro/go-zero@latest
 
 打开 Visual Studio Code | Extensions，搜索 goctl，点击 install 安装
 
-
-
 ## go-zero 配置 config
 
-go-zero 支持三种格式的文件： yam, json, toml 
-
-程序会自动的通过后缀来加对应配置文件格式。 
-
-conf 目前已经默认自动支持 key 大小写不敏感。 
+1、go-zero 支持三种格式的文件： yam, json, toml 
+2、程序会自动的通过后缀来加对应配置文件格式。 
+3、conf 目前已经默认自动支持 key 大小写不敏感。 
 
 支持环境变量
 
@@ -74,13 +65,11 @@ conf 目前已经默认自动支持 key 大小写不敏感。
 4、range 当前参数数值有效范围，仅对数值有效，写法规则详情见下文温馨提示
 5、env 当前参数从环境变量获取
 
-
 tag 的 inherit  功能会不会把配置文件搞复杂了？
 
+# go-zero 常用命令
 
-## go-zero 常用命令
-
-```
+```sh 
 goctl api go -api hello.api -dir .
 ```
 
@@ -93,7 +82,7 @@ goctl api go  -dir . -style goZero  -api user.api
 goctl rpc protoc wx-proxy.proto  --go_out=. --go-grpc_out=. --zrpc_out=. -style goZero
 ```
 
-## 配置 prometheus 
+# 配置 prometheus 
 
 https://go-zero.dev/docs/tutorials/go-zero/configuration/prometheus
 
@@ -128,7 +117,17 @@ http://127.0.0.1:9090/targets 查看 是否已经注册到 prometheus 中。
 
 https://zhuanlan.zhihu.com/p/653999111
 
-## RPC 
+# go-zore swagger
+
+```sh
+go install github.com/zeromicro/goctl-swagger@latest
+
+go install github.com/zeromicro/goctl-swagger@latest
+
+goctl api plugin -plugin goctl-swagger="swagger -filename adp-api-service.json" -api adp-api-service.api -dir .
+```
+
+# RPC 
 
 
 rpc 的 Etcd 配置
@@ -150,7 +149,7 @@ grpc 测试工具 `grpcurl ` , 地址：https://github.com/fullstorydev/grpcurl
 go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
 ```
 
-## http client 
+# http client 
 
 https://go-zero.dev/docs/tutorials/http/client/index
 
@@ -159,7 +158,7 @@ https://cloud.tencent.com/developer/article/1832719
 
 https://juejin.cn/post/7272581426331254839
 
-## error 
+# error 
 
 打包失败，如下：
 
@@ -187,25 +186,14 @@ https://juejin.cn/post/7272581426331254839
 
 docker 内的 golang 版本过低。 要替换高版本。 
 
-在 `.gitlab-ci.yml` 中 把  `image: default.registry.tke.com/vrviu/gobuild:0.3` 换成 `hub-docker.yuntiancloud.com/ci/gobuild:1.21.3-0.1`
+在 `.gitlab-ci.yml` 中 把  `image: default.registry.tke.com/xxxxx/gobuild:0.3` 换成 `hub-docker.xxxx.com/ci/gobuild:1.21.3-0.1`
 
-```sh 
-root@6020-mg-01:/app/cag-proxy# ./cag-proxy 
-./cag-proxy: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found (required by ./cag-proxy)
-./cag-proxy: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by ./cag-proxy)
-```
-
-go build 前加 
-
-```
-export CGO_ENABLED=0
-```
 
 ```sh 
 2024-01-03T14:56:10.564+08:00    error  [flow_id-1234567890] wx.GetWebAccessToken err : Get "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx44217ca4482c833d&code=0611Xb1w340iZ13cPb4w35iH8P01Xb1A&grant_type=authorization_code&secret=7c6526d8a80081dbe7d4bdcbda6eb420": tls: failed to verify certificate: x509: certificate signed by unknown authority    caller=logic/geWxUserInfoLogic.go:31
 ```
 
-## go-zore 日志输出
+# go-zore 日志输出
 
 go-zore 日志输出方式体验让我有一些不适。 
 
@@ -216,13 +204,15 @@ go-zore 日志输出方式体验让我有一些不适。
 
 ```
 
-出一些  `\u0026` 之类的。 但如果把 Encoding 设置为 plain，则正常。 
+出现一些  `\u0026` 之类的。 但如果把 Encoding 设置为 plain，则正常。 
 
 ```sh 
 2024-03-09T15:47:08.006+08       error  httpc.Do err userId[512] host[http://127.0.0.1:8888/xxxxx/xxxxxxList?offset=0&limit=10&order=desc&sortby=create_time&state=-1&states=0,1,2,3,4&biz_id=0&agent_id=512]      caller=server/Helper.go:164        trace=ca5e1ad81e7d0528f38b361c63a75f35  span=48b14f5d8bce91e9
 ```
 
-## httpc.Do post 数据因 struct 继承导致的失败
+# httpc.Do 方法
+
+post 数据因 struct 继承导致的失败
 
 工作时遇到的一个问题。
 
@@ -278,7 +268,7 @@ baseCByte ----- > {"offset":199,"limit":0,"id":1,"name":"kane","addr":"guangdong
 
 想像上面 baseC 数据的结构应该是这样的。但事实却不一样。 
 
-自己 golang 的底层知识不够导致的。 
+golang 的底层知识不够导致的。 
 
 go-zore 的  `httpc.Do()`在 post 数据带上设置头信息时，[https://go-zero.dev/docs/tutorials/http/client/index](https://go-zero.dev/docs/tutorials/http/client/index)
 
@@ -317,3 +307,18 @@ type Request struct {
 ```
 
 发送过去之后， Body 成了空的。估计就是继承无法正确解析的原因。 
+
+# goctl api 报错
+
+```sh
+wx-proxy.api 100:12 syntax error: expected 'api', got 'IDENT'
+make: *** [makefile:25：api] 错误 1
+```
+
+要用了 goctl 1.6 的版本才可以
+
+```sh 
+go install github.com/zeromicro/go-zero/tools/goctl@v1.6.0
+```
+
+>goctl 其他版本下载：https://mygit.top/release/77455633

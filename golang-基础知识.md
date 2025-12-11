@@ -209,7 +209,6 @@ package main
 import ( 
     "fmt"
     "github.com/myteam/exp/crc32"
-)
 ```
 
 `"github.com/myteam/exp/crc32"` 就是远程的包
@@ -463,6 +462,23 @@ release:
 docs:
   swag init
 ```
+
+  
+在docker 内执行出现以下错误：这是一个常见的错误。我们要生成 **完全静态编译** 的二进制文件
+```sh
+root@mg-01:/app/xx-proxy# ./xx-proxy
+
+./cag-proxy: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found (required by ./xx-proxy)
+
+./cag-proxy: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by ./xx-proxy)
+
+```
+
+所以在 go build 前加 要加上 `export CGO_ENABLED=0`
+
+CGO_ENABLED=0 的效果非常重要，主要是为了构建“纯净、可移植、可在任意 Linux 上运行的静态编译二进制”。
+- `GO_ENABLED=1` → **启用 CGO**
+- `CGO_ENABLED=0` → **禁用 CGO（完全不依赖系统 C 库）**
 
 ## golang 包
 
