@@ -937,9 +937,7 @@ your-project/
 ├── internal/            # 项目内部代码（不对外暴露）
 │   ├── api/             # DTO（请求/响应结构）和路由
 │   │   ├── v1/
-│   │   │   ├── user.go
-│   │   │   ├── user_req.go
-│   │   │   └── user_resp.go
+│   │   │   ├── user.go  # req 和 resp 
 │   │   └── router.go    # 注册所有路由
 │   │
 │   ├── handler/         # controller 层（HTTP 入口）
